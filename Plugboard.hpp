@@ -6,15 +6,16 @@
 #define CENIGMA_DSG115_PLUGBOARD_H
 
 #include "Pair.hpp"
+#include "Component.hpp"
 #include <vector>
 #include <string>
 
-class Plugboard {
+class Plugboard : public Component{
 private:
-    std::string stream;
+    void firstConfig(std::vector<int>*);
 public:
-    std::vector<Pair> buildPairs(std::string stream);
-    std::vector<int> parseInts(const std::string& stream);
+    Plugboard(std::vector<int>*);
+
 };
 
 
