@@ -1,7 +1,6 @@
 #ifndef CENIGMA_DSG115_COMPONENT_H
 #define CENIGMA_DSG115_COMPONENT_H
 
-
 #include <vector>
 
 class Component {
