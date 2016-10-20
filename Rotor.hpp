@@ -6,14 +6,14 @@
 class Rotor : public Component {
 public:
     ~Rotor();
-    Rotor(std::ifstream rotorFile);
+    Rotor(std::string rotorStream);
     bool shouldRotorTurn();
     int getNumTurns();
 
 private:
     int numTurns;
     void findOffsets();
-    std::vector<int>* parseRotorFile(std::ifstream rotorFile);
+    void parseRotorFile(std::string rotorFile);
 };
 
 #endif

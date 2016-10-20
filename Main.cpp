@@ -71,7 +71,9 @@ void getRotors(int argc, char **argv, std::vector<Component*>* components)
     {
         std::ifstream rotorFile(argv[i]);
         if (rotorFile) {
-            components->push_back(new Rotor(rotorFile));
+            std::stringstream buffer;
+            buffer << rotorFile.rdbuf();
+            components->push_back(new Rotor(buffer.str()));
             rotorFile.close();
         }
         else throw std::invalid_argument("not a rotor file");

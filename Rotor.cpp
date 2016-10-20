@@ -1,10 +1,11 @@
 #include <cstdlib>
 #include "Rotor.hpp"
 #include <algorithm>
+#include <sstream>
 
-Rotor::Rotor(std::ifstream rotorFile)
+Rotor::Rotor(std::string rotorStream)
 {
-    this->forward = parseRotorFile(rotorFile);
+    parseRotorFile(rotorStream);
     this->numTurns = 0;
     findOffsets();
 
@@ -14,10 +15,13 @@ Rotor::~Rotor() {
     delete(forward);
 }
 
-std::vector<int>* Rotor::parseRotorFile(std::ifstream rotorFile) {
-    int value;
-    while (rotorFile >> value) { this->forward->push_back(value); }
-    rotorFile.close();
+void Rotor::parseRotorFile(std::string rotorString) {
+//    string to char array
+    int n;
+    std::stringstream stream(rotorString);
+    while(stream >> n){
+        forward->push_back(n);
+    }
 }
 
 void Rotor::findOffsets()
