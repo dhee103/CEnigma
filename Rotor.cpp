@@ -2,11 +2,22 @@
 #include "Rotor.hpp"
 #include <algorithm>
 
-Rotor::Rotor(std::vector<int> *config)
+Rotor::Rotor(std::ifstream rotorFile)
 {
-    this->forward = config;
+    this->forward = parseRotorFile(rotorFile);
     this->numTurns = 0;
     findOffsets();
+
+}
+
+Rotor::~Rotor() {
+    delete(forward);
+}
+
+std::vector<int>* Rotor::parseRotorFile(std::ifstream rotorFile) {
+    int value;
+    while (rotorFile >> value) { this->forward->push_back(value); }
+    rotorFile.close();
 }
 
 void Rotor::findOffsets()

@@ -1,10 +1,9 @@
 #include "Rotor.hpp"
 #include "Plugboard.hpp"
 #include "Reflector.hpp"
-#include <stdexcept>
+#include <sstream>
 #include <iostream>
 #include <fstream>
-#include <sstream>
 
 // declarations of helper functions
 void getRotors(int argc, char **argv, std::vector<Component*>* components);
@@ -32,35 +31,48 @@ int main(int argc, char **argv)
     char c;
     while (std::cin >> c)
     {
-//        std::cin >> c;
         if (isupper(c))
         {
             std::cout << encrypt(&components, c);
             turnRotors(&components);
-//            std::cout << "gottem" << std::endl;
         }
         else if (!isspace(c))
             throw std::invalid_argument("Received a non upper case character");
     }
 
-    for (Component* c: components) free(c);
+//    free(reflector);
+    for (Component* component: components) free(component);
 
     for (int i = 0; i < argc; i++) free(argv[argc]);
 
     return 0;
 }
 
+//void getRotors(int argc, char **argv, std::vector<Component*>* components)
+//{
+//    for (int i = 1; i < argc - 1; i++)
+//    {
+//        std::vector<int> *config = new std::vector<int>;
+//        std::ifstream rotarfile(argv[i]);
+//        if (rotarfile) {
+//            int value;
+//            while (rotarfile >> value) config->push_back(value);
+//            components->push_back(new Rotor(config));
+//            rotarfile.close();
+//        }
+//        else throw std::invalid_argument("not a rotor file");
+//    }
+//}
+
+
 void getRotors(int argc, char **argv, std::vector<Component*>* components)
 {
     for (int i = 1; i < argc - 1; i++)
     {
-        std::ifstream rotarfile(argv[i]);
-        if (rotarfile) {
-            std::vector<int> *config = new std::vector<int>;
-            int value;
-            while (rotarfile >> value) config->push_back(value);
-            components->push_back(new Rotor(config));
-            rotarfile.close();
+        std::ifstream rotorFile(argv[i]);
+        if (rotorFile) {
+            components->push_back(new Rotor(rotorFile));
+            rotorFile.close();
         }
         else throw std::invalid_argument("not a rotor file");
     }

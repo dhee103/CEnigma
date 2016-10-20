@@ -3,6 +3,7 @@
 
 #define ALPHABET_SIZE 26
 #include <vector>
+#include <fstream>
 
 class Component {
 public:

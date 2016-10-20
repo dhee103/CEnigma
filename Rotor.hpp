@@ -5,13 +5,15 @@
 
 class Rotor : public Component {
 public:
-    Rotor(std::vector<int>* config);
+    ~Rotor();
+    Rotor(std::ifstream rotorFile);
     bool shouldRotorTurn();
     int getNumTurns();
 
 private:
     int numTurns;
     void findOffsets();
+    std::vector<int>* parseRotorFile(std::ifstream rotorFile);
 };
 
 #endif
