@@ -1,6 +1,5 @@
-#ifndef CENIGMA_DSG115_ROTOR_H
-#define CENIGMA_DSG115_ROTOR_H
-
+#ifndef __ROTOR_H
+#define __ROTOR_H
 
 #include "Component.hpp"
 
@@ -12,8 +11,7 @@ public:
 
 private:
     int numTurns;
-
+    void findOffsets();
 };
 
-
-#endif //CENIGMA_DSG115_ROTOR_H
+#endif

@@ -1,5 +1,4 @@
 #include "Reflector.hpp"
-#define ALPHABET_SIZE 26
 #define OFFSET 13
 
 Reflector::Reflector() {
@@ -8,3 +7,7 @@ Reflector::Reflector() {
         forward->push_back(OFFSET);
     }
 }
+
+bool Reflector::shouldRotorTurn() { return false; }
+int Reflector::getNumTurns() { return -1; }
+

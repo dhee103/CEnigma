@@ -1,37 +1,47 @@
 #include "Rotor.hpp"
 #include "Plugboard.hpp"
+#include "Reflector.hpp"
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
-
+// declarations of helper functions
 void getRotors(int argc, char **argv, std::vector<Component*>* components);
-
 void getPlugboard(char *stream, std::vector<Component*>* components);
+int charToInt(char c);
+char intToChar(int i);
+char encrypt(std::vector<Component*>* components, char c);
+void turnRotors(std::vector<Component*>* components);
 
-void printVector(std::vector<int> *vector);
+
+// declaration of helper functions for testing purposes
+//void printVector(std::vector<int> *vector);
 
 int main(int argc, char **argv)
 {
-    std::vector<Component*> components;
-    getRotors(argc, argv, &components);
+/*  create a vector of pointers to the components
+    use the appropriate helper functions & constructors to add the relevant
+        constructors to the vector */
+    std::vector<Component*> components = std::vector<Component*>();
     getPlugboard(argv[argc - 1], &components);
+    getRotors(argc, argv, &components);
+    Reflector* reflector = new Reflector();
+    components.push_back(reflector);
 
     char c;
-    while (!std::cin)
+    while (std::cin >> c)
     {
-        std::cin >> c;
+//        std::cin >> c;
         if (isupper(c))
         {
-//            runMachine()
-//            turnRotor()
-            std::cout << "\nencrypt(c)";/*        encrypt(c); */
+            std::cout << encrypt(&components, c);
+            turnRotors(&components);
+//            std::cout << "gottem" << std::endl;
         }
         else if (!isspace(c))
             throw std::invalid_argument("Received a non upper case character");
     }
-
 
     for (Component* c: components) free(c);
 
@@ -69,13 +79,62 @@ void getPlugboard(char *stream, std::vector<Component*>* components)
     else throw std::invalid_argument("not a plugboard file");
 }
 
-// remove this code repetition
+// remove this code repetition ^
 
 
-void printVector(std::vector<int> *vector)
+//int charToInt(char c) { return (int)c - '0'; }
+
+int charToInt(char c) {
+    if (c >= 'A' || c <= 'Z') {
+        return c - 'A';
+    }
+
+    std::runtime_error("Only allowed to enter capital A-Z.");
+    exit(1);
+}
+
+char intToChar(int i) { return (char)('A' + i); }
+
+char encrypt(std::vector<Component*>* components, char c)
 {
-    for (unsigned int i = 0; i < vector->size(); i++)
+    int charAsNum = charToInt(c);
+
+    for (unsigned int i = 0; i < components->size(); i++)
     {
-        std::cout << "value at " << i << " is: " << vector->at(i) << std::endl;
+        charAsNum = components->at(i)->getForwardsCharAsInt(charAsNum);
+    }
+
+    for (int i = components->size() - 2; i >= 0; i--)
+    {
+//        std::cout << "2nd Loop Count is: " <<  i << std::endl;
+        charAsNum = components->at(i)->getBackwardsCharAsInt(charAsNum);
+    }
+
+//    std::cout << "Loop End" << std::endl;
+
+    return intToChar(charAsNum);
+}
+
+void turnRotors(std::vector<Component*>* components) {
+    bool needToTurn = true;
+    for (unsigned int i = 1; i < components->size() - 1; i++) {
+        if (needToTurn) {
+            needToTurn = components->at(i)->shouldRotorTurn();
+//            cout << components->at(i)->getNumOfTurns();
+        } else {
+            //if don't need to turn, nothing else needs to turn
+            break;
+        }
     }
 }
+
+
+
+// for testing purposes
+//void printVector(std::vector<int> *vector)
+//{
+//    for (unsigned int i = 0; i < vector->size(); i++)
+//    {
+//        std::cout << "value at " << i << " is: " << vector->at(i) << std::endl;
+//    }
+//}

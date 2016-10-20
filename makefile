@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -std=c++11 -O -Wall -Werror -Wextra -Wformat -Wunused-function -pedantic -g
+CFLAGS = -std=c++11 -O -Wall -Werror -Wextra -Wunused-function -pedantic -g
 OBJS = Main.o Rotor.o Plugboard.o Reflector.o Component.o
 
 .PHONY: clean
@@ -9,6 +9,9 @@ enigma: $(OBJS)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c $^
+
+test: enigma
+	./tests.py
 
 clean:
 	rm -rf enigma *.o

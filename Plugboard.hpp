@@ -1,5 +1,5 @@
-#ifndef CENIGMA_DSG115_PLUGBOARD_H
-#define CENIGMA_DSG115_PLUGBOARD_H
+#ifndef __PLUGBOARD_H
+#define __PLUGBOARD_H
 
 #include "Component.hpp"
 #include <vector>
@@ -12,5 +12,4 @@ public:
     int getNumTurns() { return -1; }
 };
 
-
-#endif //CENIGMA_DSG115_PLUGBOARD_H
+#endif

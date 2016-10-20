@@ -1,16 +1,13 @@
-//
-// Created by dhee on 18/10/16.
-//
-
-#ifndef CENIGMA_DSG115_REFLECTOR_H
-#define CENIGMA_DSG115_REFLECTOR_H
+#ifndef __REFLECTOR_H
+#define __REFLECTOR_H
 
 #include "Component.hpp"
 
 class Reflector : public Component {
 public:
     Reflector();
+    bool shouldRotorTurn();
+    int getNumTurns();
 };
 
-
-#endif //CENIGMA_DSG115_REFLECTOR_H
+#endif
