@@ -75,6 +75,7 @@ void getPlugboard(char *stream, std::vector<Component*>* components)
         while (plugboardfile >> value) config->push_back(value);
         components->push_back(new Plugboard(config));
         plugboardfile.close();
+        delete(config);
     }
     else throw std::invalid_argument("not a plugboard file");
 }
