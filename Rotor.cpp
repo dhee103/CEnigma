@@ -1,27 +1,13 @@
 #include <cstdlib>
 #include "Rotor.hpp"
 #include <algorithm>
-#include <sstream>
+#include <iostream>
 
-Rotor::Rotor(std::string rotorStream)
+Rotor::Rotor(char *arg)
 {
-    parseRotorFile(rotorStream);
+    parseRotor(arg);
     this->numTurns = 0;
     findOffsets();
-
-}
-
-Rotor::~Rotor() {
-    delete(forward);
-}
-
-void Rotor::parseRotorFile(std::string rotorString) {
-//    string to char array
-    int n;
-    std::stringstream stream(rotorString);
-    while(stream >> n){
-        forward->push_back(n);
-    }
 }
 
 void Rotor::findOffsets()
@@ -62,6 +48,18 @@ bool Rotor::shouldRotorTurn()
 
 int Rotor::getNumTurns() { return numTurns; }
 
+void Rotor::parseRotor(char *arg)
+{
+        std::vector<int> *config = new std::vector<int>;
+        std::ifstream rotorFile(arg);
+        if (rotorFile) {
+            int value;
+            while (rotorFile >> value) config->push_back(value);
+            forward = config;
+            rotorFile.close();
+        }
+        else { std::cerr << "not a rotor file"; exit(1); }
+}
 
 
 

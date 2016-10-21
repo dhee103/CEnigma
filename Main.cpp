@@ -24,7 +24,11 @@ int main(int argc, char **argv)
         constructors to the vector */
     std::vector<Component*> components = std::vector<Component*>();
     getPlugboard(argv[argc - 1], &components);
-    getRotors(argc, argv, &components);
+//    getRotors(argc, argv, &components);
+    for (int i = 1; i < argc - 1; i++)
+    {
+        components.push_back(new Rotor(argv[i]));
+    }
     Reflector* reflector = new Reflector();
     components.push_back(reflector);
 
@@ -53,37 +57,23 @@ int main(int argc, char **argv)
 //    for (int i = 1; i < argc - 1; i++)
 //    {
 //        std::vector<int> *config = new std::vector<int>;
-//        std::ifstream rotarfile(argv[i]);
-//        if (rotarfile) {
+//        std::ifstream rotorfile(argv[i]);
+//        if (rotorfile) {
 //            int value;
-//            while (rotarfile >> value) config->push_back(value);
+//            while (rotorfile >> value) config->push_back(value);
 //            components->push_back(new Rotor(config));
-//            rotarfile.close();
+//            rotorfile.close();
 //        }
-//        else throw std::invalid_argument("not a rotor file");
+//        else { std::cerr << "not a rotor file"; exit(1); }
 //    }
 //}
 
 
-void getRotors(int argc, char **argv, std::vector<Component*>* components)
-{
-    for (int i = 1; i < argc - 1; i++)
-    {
-        std::ifstream rotorFile(argv[i]);
-        if (rotorFile) {
-            std::stringstream buffer;
-            buffer << rotorFile.rdbuf();
-            components->push_back(new Rotor(buffer.str()));
-            rotorFile.close();
-        }
-        else throw std::invalid_argument("not a rotor file");
-    }
-}
-
 void getPlugboard(char *stream, std::vector<Component*>* components)
 {
     std::ifstream plugboardfile(stream);
-    if (plugboardfile) {
+    if (plugboardfile)
+    {
         std::vector<int> *config = new std::vector<int>;
         int value;
         while (plugboardfile >> value) config->push_back(value);
@@ -91,20 +81,14 @@ void getPlugboard(char *stream, std::vector<Component*>* components)
         plugboardfile.close();
         delete(config);
     }
-    else throw std::invalid_argument("not a plugboard file");
+    else { std::cerr << "not a plugboard file"; exit(1); }
 }
 
 // remove this code repetition ^
 
-
-//int charToInt(char c) { return (int)c - '0'; }
-
 int charToInt(char c) {
-    if (c >= 'A' || c <= 'Z') {
-        return c - 'A';
-    }
-
-    std::runtime_error("Only allowed to enter capital A-Z.");
+    if (c >= 'A' || c <= 'Z') { return c - 'A'; }
+    std::cerr << "not a valid character";
     exit(1);
 }
 
@@ -121,11 +105,8 @@ char encrypt(std::vector<Component*>* components, char c)
 
     for (int i = components->size() - 2; i >= 0; i--)
     {
-//        std::cout << "2nd Loop Count is: " <<  i << std::endl;
         charAsNum = components->at(i)->getBackwardsCharAsInt(charAsNum);
     }
-
-//    std::cout << "Loop End" << std::endl;
 
     return intToChar(charAsNum);
 }
