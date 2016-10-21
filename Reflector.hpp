@@ -3,11 +3,16 @@
 
 #include "Component.hpp"
 
-class Reflector : public Component {
+/*
+   The reflector class is a component which is used to represent the
+   reflector.
+*/
+class Reflector : public Component
+{
 public:
     Reflector();
-    bool shouldRotorTurn();
-    int getNumTurns();
+    bool shouldNextRotorTurn() { return false; };
+    int getNumTurns() { return -1; };
 };
 
 #endif

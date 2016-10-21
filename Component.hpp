@@ -10,7 +10,7 @@ public:
     ~Component();
     int getForwardsCharAsInt(int);
     int getBackwardsCharAsInt(int);
-    virtual bool shouldRotorTurn() = 0;
+    virtual bool shouldNextRotorTurn() = 0;
     virtual int getNumTurns() = 0;
 
 protected:

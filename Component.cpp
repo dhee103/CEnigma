@@ -22,15 +22,5 @@ int Component::getForwardsCharAsInt(int charAsNum)
 
 int Component::getBackwardsCharAsInt(int charAsNum)
 {
-//    int temp = charAsNum + ALPHABET_SIZE;
-////    std::cout << "retrieval from reverse" << std::endl;
-////    printVector(reverse);
-////    std::cout << "vector print" << std::endl;
-//    temp -= reverse->at(charAsNum);
-////    std::cout << "successful retrieval" << std::endl;
-//    temp %= ALPHABET_SIZE;
-////    std::cout << "mod" << std::endl;
-//    return temp;
-
     return (charAsNum + ALPHABET_SIZE - reverse->at(charAsNum)) % ALPHABET_SIZE;
 }

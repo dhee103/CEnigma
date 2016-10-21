@@ -5,11 +5,19 @@
 #include <vector>
 #include <string>
 
-class Plugboard : public Component{
+/*
+   The plugboard class is a component which is used to represent the
+   plugboard and contains a method to parse it
+*/
+class Plugboard : public Component
+{
 public:
-    Plugboard(std::vector<int>*);
-    bool shouldRotorTurn() { return false; }
+    Plugboard(char *stream);
+    bool shouldNextRotorTurn() { return false; }
     int getNumTurns() { return -1; }
+private:
+    std::vector<int>* config;
+    void parsePlugboard(char *stream);
 };
 
 #endif

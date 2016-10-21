@@ -9,30 +9,37 @@ char encrypt(std::vector<Component*>* components, char c);
 void turnRotors(std::vector<Component*>* components);
 
 // declarations of helper functions
-void getPlugboard(char *stream, std::vector<Component*>* components);
 int charToInt(char c);
 char intToChar(int i);
-
-// declaration of helper functions for testing purposes
-//void printVector(std::vector<int> *vector);
 
 int main(int argc, char **argv)
 {
 //  check if there are any arguments and if so exit with an error
     if (argc <= 1) { std::cerr << "not enough arguments passed"; exit(1); }
 
-/*  create a vector of pointers to the components
+/*
+    create a vector of pointers to the components
     use the appropriate helper functions & constructors to add the relevant
-        constructors to the vector in the order that the input will travel
-        i.e. plugboard, rotors, reflector */
+    constructors to the vector in the order that the input will travel
+    i.e. plugboard then rotors then reflector
+*/
     std::vector<Component*> components = std::vector<Component*>();
-    getPlugboard(argv[argc - 1], &components);
+    components.push_back(new Plugboard(argv[argc - 1]));
     for (int i = 1; i < argc - 1; i++) {
         components.push_back(new Rotor(argv[i]));
     }
-    Reflector* reflector = new Reflector();
-    components.push_back(reflector);
+    components.push_back(new Reflector());
 
+/*
+    main program loop
+    Reads in  character as long as there as one from std:cin. If there isn't
+    this means that the user input has finished so the program ends
+    appropriately. After reading in the character it checks if it's valid. If
+    it's upper case then it will perform the encryption. If it's not then it
+    checks if it's a space character, if it is then the character is ignored
+    but if it's not a space character then we know it must invalid so an
+    error message is output
+ */
     char c;
     while (std::cin >> c)
     {
@@ -44,37 +51,24 @@ int main(int argc, char **argv)
         else if (!isspace(c)) { std::cerr << "not a valid character"; exit(1); }
     }
 
+//    free components and program arguments
     for (Component* component: components) free(component);
-
     for (int i = 0; i < argc; i++) free(argv[argc]);
 
     return 0;
 }
 
-void getPlugboard(char *stream, std::vector<Component*>* components)
-{
-    std::ifstream plugboardfile(stream);
-    if (plugboardfile)
-    {
-        std::vector<int> *config = new std::vector<int>;
-        int value;
-        while (plugboardfile >> value) config->push_back(value);
-        components->push_back(new Plugboard(config));
-        plugboardfile.close();
-        delete(config);
-    }
-    else { std::cerr << "not a plugboard file"; exit(1); }
-}
-
-// remove this code repetition ^
-
-int charToInt(char c) {
-    if (c >= 'A' || c <= 'Z') { return c - 'A'; }
-    std::cerr << "not a valid character";
-    exit(1);
-}
-
-char intToChar(int i) { return (char)('A' + i); }
+/*
+    For encrypt, the input and output is a char but I work with integers
+    within my program so I use two helper functions to convert to and from
+    integers.
+    Encrypt goes through my components vector and getting the result of that
+    component on the character i.e. through the loop, charAsNum will hold the
+    value of the character after the plugboard, the rotors and finally the
+    reflector.
+    This is done both forwards (the 1st for loop) and in reverse (the 2nd for
+    loop).
+*/
 
 char encrypt(std::vector<Component*>* components, char c)
 {
@@ -93,26 +87,31 @@ char encrypt(std::vector<Component*>* components, char c)
     return intToChar(charAsNum);
 }
 
-void turnRotors(std::vector<Component*>* components) {
-    bool needToTurn = true;
-    for (unsigned int i = 1; i < components->size() - 1; i++) {
-        if (needToTurn) {
-            needToTurn = components->at(i)->shouldRotorTurn();
-//            cout << components->at(i)->getNumOfTurns();
-        } else {
-            //if don't need to turn, nothing else needs to turn
-            break;
-        }
+
+/*
+    Runs shouldNextRotorTurn() from components for each rotor
+    This will turn the current rotor and then check if the next rotor should
+    be turned next time and sets it accordingly
+*/
+void turnRotors(std::vector<Component*>* components)
+{
+    bool shouldNextRotorTurn = true;
+    for (unsigned int i = 1; i < components->size() - 1; i++)
+    {
+        if (shouldNextRotorTurn)
+            { shouldNextRotorTurn = components->at(i)->shouldNextRotorTurn(); }
+        else { break; }
     }
 }
 
+int charToInt(char c)
+{
+    if (c >= 'A' || c <= 'Z') { return c - 'A'; }
+    std::cerr << "conversion from char to int failed"; exit(1);
+}
 
-
-// for testing purposes
-//void printVector(std::vector<int> *vector)
-//{
-//    for (unsigned int i = 0; i < vector->size(); i++)
-//    {
-//        std::cout << "value at " << i << " is: " << vector->at(i) << std::endl;
-//    }
-//}
+char intToChar(int i)
+{
+    if (i >= 0 && i <= 26) { return (char)('A' + i); }
+    std::cerr << "conversion from int to char failed"; exit(1);
+}
