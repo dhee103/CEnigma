@@ -19,6 +19,9 @@ void turnRotors(std::vector<Component*>* components);
 
 int main(int argc, char **argv)
 {
+
+    if (argc <= 1) { std::cerr << "not enough arguments passed"; exit(1); }
+
 /*  create a vector of pointers to the components
     use the appropriate helper functions & constructors to add the relevant
         constructors to the vector */
@@ -40,8 +43,7 @@ int main(int argc, char **argv)
             std::cout << encrypt(&components, c);
             turnRotors(&components);
         }
-        else if (!isspace(c))
-            throw std::invalid_argument("Received a non upper case character");
+        else if (!isspace(c)) { std::cerr << "not a valid character"; exit(1); }
     }
 
 //    free(reflector);
