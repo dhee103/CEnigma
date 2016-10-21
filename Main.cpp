@@ -3,33 +3,31 @@
 #include "Reflector.hpp"
 #include <sstream>
 #include <iostream>
-#include <fstream>
 
-// declarations of helper functions
-void getRotors(int argc, char **argv, std::vector<Component*>* components);
-void getPlugboard(char *stream, std::vector<Component*>* components);
-int charToInt(char c);
-char intToChar(int i);
+// declarations of main program functions
 char encrypt(std::vector<Component*>* components, char c);
 void turnRotors(std::vector<Component*>* components);
 
+// declarations of helper functions
+void getPlugboard(char *stream, std::vector<Component*>* components);
+int charToInt(char c);
+char intToChar(int i);
 
 // declaration of helper functions for testing purposes
 //void printVector(std::vector<int> *vector);
 
 int main(int argc, char **argv)
 {
-
+//  check if there are any arguments and if so exit with an error
     if (argc <= 1) { std::cerr << "not enough arguments passed"; exit(1); }
 
 /*  create a vector of pointers to the components
     use the appropriate helper functions & constructors to add the relevant
-        constructors to the vector */
+        constructors to the vector in the order that the input will travel
+        i.e. plugboard, rotors, reflector */
     std::vector<Component*> components = std::vector<Component*>();
     getPlugboard(argv[argc - 1], &components);
-//    getRotors(argc, argv, &components);
-    for (int i = 1; i < argc - 1; i++)
-    {
+    for (int i = 1; i < argc - 1; i++) {
         components.push_back(new Rotor(argv[i]));
     }
     Reflector* reflector = new Reflector();
@@ -46,30 +44,12 @@ int main(int argc, char **argv)
         else if (!isspace(c)) { std::cerr << "not a valid character"; exit(1); }
     }
 
-//    free(reflector);
     for (Component* component: components) free(component);
 
     for (int i = 0; i < argc; i++) free(argv[argc]);
 
     return 0;
 }
-
-//void getRotors(int argc, char **argv, std::vector<Component*>* components)
-//{
-//    for (int i = 1; i < argc - 1; i++)
-//    {
-//        std::vector<int> *config = new std::vector<int>;
-//        std::ifstream rotorfile(argv[i]);
-//        if (rotorfile) {
-//            int value;
-//            while (rotorfile >> value) config->push_back(value);
-//            components->push_back(new Rotor(config));
-//            rotorfile.close();
-//        }
-//        else { std::cerr << "not a rotor file"; exit(1); }
-//    }
-//}
-
 
 void getPlugboard(char *stream, std::vector<Component*>* components)
 {
