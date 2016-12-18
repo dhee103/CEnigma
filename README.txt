@@ -1,6 +1,8 @@
 CS2 Enigma
 ==========
 
+An emulator for the Enigma machine from WW2.  
+
 Sample Configuration Files and A Small Testsuite
 ================================================
 
